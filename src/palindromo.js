@@ -22,9 +22,12 @@
  */
 
 function esPalindromo(word) {
-  word = "";
-  if (word.toUppercase()) {
-    word.value = word.toLoweCase();
-    
+  let palabra = word.split("").reverse().join("");
+
+  if (palabra == word) {
+    console.log("Es palindromo");
+  } else {
+    console.log("No es palindromo");
   }
 }
+esPalindromo("oso");
