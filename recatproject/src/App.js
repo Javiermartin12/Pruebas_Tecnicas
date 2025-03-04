@@ -30,9 +30,50 @@
 
 // ---
 import "./App.css";
-
+import { useState, useEffect } from "react";
 function App() {
-  return <div className="App"></div>;
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchUser = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch("https://randomuser.me/api/");
+      if (!response.ok) {
+        throw new Error("Error al cargar el usuario");
+      }
+      const data = await response.json();
+      setUser(data.results[0]);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  return (
+    <div className="App">
+      <button onClick={fetchUser} disabled={loading}>
+        {loading ? "Cargando usuario..." : "Obtener usuario"}
+        Obtener usuario
+      </button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {user && (
+        <div>
+          <img src={user.picture.large} alt="Foto de perfil" />
+          <h2>
+            {user.name.first} {user.name.last}
+          </h2>
+          <p>{user.email}</p>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default App;
